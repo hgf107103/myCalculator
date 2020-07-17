@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>퍼센트 계산기</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0 0;
+            padding: 0 0;
+            font-family: "Noto Sans KR";
+            cursor: default;
+        }
+        *:focus {
+            outline: none;
+        }
+        body {
+            width: 700px;
+            margin-bottom: 500px;
+        }
+        form fieldset {
+            padding: 30px 20px;
+            margin: 50px 50px;
+            text-align: center;
+            border: 1px solid black;
+            border-radius: 25px;
+        }
+        form fieldset legend {
+            border: 1px solid black;
+            border-radius: 10px;
+            font-size: 25px;
+            padding: 10px 25px;
+            transition: all ease 1s 1s;
+        }
+        form fieldset legend:hover {
+            border: 1px solid red;
+            transition: all ease 2s 0s;
+        }
+        form fieldset h2 {
+            font-size: 35px;
+        }
+        form fieldset p {
+            text-align: center;
+            font-size: 25px;
+            margin: 20px 0px;
+        }
+        form fieldset span {
+            padding: 0px 60px;
+            font-size: 25px;
+        }
+        form fieldset input {
+            padding: 5px 15px;
+            font-size: 22px;
+            margin-bottom: 20px;
+            border: 1px solid gray;
+            text-align: center;
+            cursor: text;
+            transition: all ease 1s 0s;
+        }
+        form fieldset input[type=number]:focus {
+            outline: none;
+            border: 1px solid black;
+            box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.4);
+            border-radius: 50px;
+            transition: all ease 1.5s 0s;
+        }
+        form fieldset input[type=button] {
+            padding: 5px 15px;
+            font-size: 22px;
+            margin-bottom: 20px;
+            border: 1px solid gray;
+            text-align: center;
+            cursor: pointer;
+            transition: all ease 1s 0s;
+        }
+        form fieldset input[type=button]:hover {
+            outline: none;
+            border: 1px solid black;
+            box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.4);
+            border-radius: 50px;
+            transition: all ease 1.5s 0s;
+        }
+        hr {
+            margin: 20px 0px;
+            border-color: red;
+        }
+        div#remote {
+            position: fixed;
+            padding: 10px 20px;
+            border: 1px solid black;
+            background-color:white;
+            top: 20px;
+            right: 20px;
+        }
+        div#remote input {
+            width: 157px;
+            overflow:hidden;
+            text-overflow:ellipsis;
+            white-space:nowrap;
+            margin-top: 4px;
+
+        }
+        button {
+            padding: 5px 10px;
+            border: 1px solid black;
+            background-color: white;
+            transition: all ease 1s 0s;
+            cursor: pointer;
+        }
+        button:hover {
+            border: 1px solid black;
+            color: white;
+            background-color: black;
+            transition: all ease 1s 0s;
+        }
+    </style>
+    <script>
+        function cal(set) {
+            try {
+                console.log('a');
+                const oneNum = Number(document.getElementById(`${set}_one`).value);
+                const twoNum = Number(document.getElementById(`${set}_two`).value);
+                let answer = 0;
+                console.log(`${oneNum} , ${twoNum}`);
+
+                if (set == 'one') {
+                    answer = Number(twoNum / oneNum * 100);
+                } else if (set == 'two') {
+                    answer = Number(oneNum * twoNum / 100);
+                } else if (set == 'thr') {
+                    answer = Number(oneNum * ( 1 + twoNum / 100));
+                } else if (set == 'for') {
+                    answer = Number(oneNum * ( 1 - twoNum / 100));
+                } else if (set == 'fiv') {
+                    answer = Number((twoNum - oneNum) / oneNum * 100);
+                }
+
+                document.getElementById(`${set}_answer`).value = Number(answer);
+
+            } catch (error) {
+                console.log(error);
+            }
+        }
+        function back(remoteNumber) {
+                location.href = `#cal${remoteNumber}`;
+        }
+
+        function tmi(text) {
+            document.getElementById("remoteText").value = text;
+        }
+    </script>
+</head>
+<body>
+    <form>
+        <fieldset>
+            <legend>아 계산해부러쓰</legend>
+            <div id="cal1">
+                <h2>1.전체 값에서 일부값을 퍼센트로</h2>
+                <p>일부 / 전체 * 100 = 퍼센트</p>
+                <span>전체값</span>
+                <br>
+                <input onkeyup="cal('one')" class="numbers" id="one_one" type="number" value="0">
+                <br>
+                <span>일부값</span>
+                <br>
+                <input onkeyup="cal('one')" class="numbers" id="one_two" type="number" value="0">
+                <br>
+                <span>퍼센트</span>
+                <br>
+                <input type="text" readonly id="one_answer" value="0">%
+            </div>
+            <hr>
+            <div id="cal2">
+                <h2>2.전체의 몇퍼센트는 얼마</h2>
+                <p>일부 * 전체 / 100 = 퍼센트</p>
+                <span>전체값</span>
+                <br>
+                <input onkeyup="cal('two')" class="numbers" id="two_one" type="number" value="0">
+                <br>
+                <span>퍼센트</span>
+                <br>
+                <input onkeyup="cal('two')" class="numbers" id="two_two" type="number" value="0">
+                <br>
+                <span>최종값</span>
+                <br>
+                <input type="text" readonly id="two_answer" value="0">
+            </div>
+            <hr>
+            <div id="cal3">
+                <h2>3.숫자 퍼센트로 증가</h2>
+                <p>숫자 * (1 + 퍼센트 / 100)</p>
+                <span>숫자</span>
+                <br>
+                <input onkeyup="cal('thr')" class="numbers" id="thr_one" type="number" value="0">
+                <br>
+                <span>퍼센트</span>
+                <br>
+                <input onkeyup="cal('thr')" class="numbers" id="thr_two" type="number" value="0">
+                <br>
+                <span>최종값</span>
+                <br>
+                <input type="text" readonly id="thr_answer" value="0">
+            </div>
+            <hr>
+            <div  id="cal4">
+                <h2>4.숫자 퍼센트로 감소</h2>
+                <p>숫자 * (1 - 퍼센트 / 100)</p>
+                <span>숫자</span>
+                <br>
+                <input onkeyup="cal('for')" class="numbers" id="for_one" type="number" value="0">
+                <br>
+                <span>퍼센트</span>
+                <br>
+                <input onkeyup="cal('for')" class="numbers" id="for_two" type="number" value="0">
+                <br>
+                <span>최종값</span>
+                <br>
+                <input type="text" readonly id="for_answer" value="0">
+            </div>
+            <hr>
+            <div  id="cal5">
+                <h2>5.숫자2는 숫자1보다 몇퍼센트 증가?</h2>
+                <p>(숫자2 - 숫자1) / 숫자1 * 100 = 퍼센트</p>
+                <span>숫자1</span>
+                <br>
+                <input onkeyup="cal('fiv')" class="numbers" id="fiv_one" type="number" value="0">
+                <br>
+                <span>숫자2</span>
+                <br>
+                <input onkeyup="cal('fiv')" class="numbers" id="fiv_two" type="number" value="0">
+                <br>
+                <span>최종값</span>
+                <br>
+                <input type="text" readonly id="fiv_answer" value="0">%
+            </div>
+            <script>
+                function calSix_sub(numberArray, number) {
+                    for (let i = 0; i < numberArray.length; i++) {
+                        if (numberArray[i] == number) {
+                            console.log('겹치는 숫자가 있다.');
+                            return false;
+                        }
+                    }
+                    return true;
+                }
+
+                function calSix_add(numberArray) {
+                    let result = 0;
+                    for (let i = 0; i < numberArray.length; i++) {
+                        result += numberArray[i];
+                    }
+                    return result;
+                }
+
+                function calSix_gob(numberArray) {
+                    let result = 1;
+                    for (let i = 0; i < numberArray.length; i++) {
+                        result *= numberArray[i];
+                    }
+                    return result;
+                }
+
+                function calSix_up(numberArray) {
+
+                    for (let i = 0; i < numberArray.length; i++) {
+                        if (numberArray[i] == 10) {
+                            numberArray[i + 1] += Math.floor(numberArray[i] / 10);
+                            numberArray[i] = numberArray[i] % 10;
+                        }
+                    }
+
+                    return numberArray;
+                }
+
+                function calSix(number) {
+                    let numbers = [];
+
+                    if (number == '' || document.getElementById('six_add').value == '' || document.getElementById('six_gob').value == '') {
+                        alert('숫자입력 필요');
+                        return;
+                    }
+
+                    for (let index = 0; index < Number(number); index++) {
+                        numbers.unshift(index + 1);
+                    }
+
+                    do {
+
+                        if (numbers[0] >= 10 || numbers.length > number) {
+                            alert(`조건에 맞는 답을 찾을 수 없습니다.\n최종 숫자 배열 : ${numbers}`);
+                            return;
+                        }
+
+                        if (calSix_add(numbers) == document.getElementById('six_add').value) {
+                            if (calSix_gob(numbers) == document.getElementById('six_gob').value) {
+                                alert(`정답 숫자 배열 : ${numbers}`);
+                                document.getElementById('six_answer').value = numbers;
+                                return;
+                            } else {
+                                //console.log('곱셈틀림');
+                            }
+                        } else {
+                            //console.log('덧셈틀림');
+                        }
+                        //console.log('숫자 더하고 다시');
+                        numbers[0]++;
+                        calSix_up(numbers);
+
+                        for (let i = 0; i < numbers.length; i++) {
+                            if (numbers[i] == numbers[i + 1] || numbers[i] == 0) {
+                                numbers[i]++
+                                i = 0;
+                            }
+                        }
+                        
+                        //console.log(numbers);
+                    } while (true);
+                }
+            </script>
+            <div id="cal6">
+                <h2>6. 수의 곱셈과 덧셈을 보고 숫자 맞추기</h2>
+                <p>반복문으로 다 돌릴거다</p>
+                <span>수의 곱셈</span>
+                <br>
+                <input class="numbers" id="six_gob" type="number" value="0">
+                <br>
+                <span>수의 덧셈</span>
+                <br>
+                <input class="numbers" id="six_add" type="number" value="0">
+                <br>
+                <span>수는 몇개</span>
+                <br>
+                <input class="numbers" id="six_num" type="number" value="0">
+                <br>
+                <input type="button" onclick="calSix(Number(document.getElementById('six_num').value))" value="결과는?">
+                <br>
+                <span>최종값</span>
+                <br>
+                <input type="text" readonly id="six_answer" value="">
+            </div>
+        </fieldset>
+    </form>
+    <div id="remote" onmouseout="tmi('')">
+        <button onmouseenter="tmi('전체 값에서 일부값을 퍼센트로')" onclick="back(1)">1</button>
+        <button onmouseenter="tmi('전체의 몇 퍼센트는 얼마인가')" onclick="back(2)">2</button>
+        <button onmouseenter="tmi('숫자 퍼센트로 증가')" onclick="back(3)">3</button>
+        <button onmouseenter="tmi('숫자 퍼센트로 감소')" onclick="back(4)">4</button>
+        <button onmouseenter="tmi('숫자2는 숫자1보다 몇퍼센트 증가?')" onclick="back(5)">5</button>
+        <br>
+        <button style="margin-top: 4px;" onmouseenter="tmi('수의 곱셈과 덧셈을 보고 숫자 맞추기')" onclick="back(6)">6</button>
+        <br>
+        <input id="remoteText" type="text" value="">
+    </div>
+</body>
+</html>
